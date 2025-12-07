@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import Todo from "./Todo";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -31,12 +31,14 @@ export default function TodoList() {
     setInp("");
   }
 
-  const todosToBeRendered = todos.filter((todo) => {
-    if (value === 0) return true;
-    if (value === 1) return todo.isDone;
-    if (value === 2) return !todo.isDone;
-    return false;
-  });
+  const todosToBeRendered = useMemo(() => {
+    return todos.filter((todo) => {
+      if (value === 0) return true;
+      if (value === 1) return todo.isDone;
+      if (value === 2) return !todo.isDone;
+      return false;
+    });
+  }, [todos, value]);
 
   function getEmptyMessage() {
     if (value === 0) return "No tasks created yet";

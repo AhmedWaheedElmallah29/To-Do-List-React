@@ -7,21 +7,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { TodosContext } from "../context/todosContext";
 import Box from "@mui/material/Box";
-import { useContext, useState } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
-import { DialogContent, TextField } from "@mui/material";
+import { useContext } from "react";
 
-export default function Todo({ todo }) {
+export default function Todo({ todo, handleOpenDelete, handleOpenEdit }) {
   const { todos, setTodos } = useContext(TodosContext);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [updateTodo, setUpdateTodo] = useState({
-    title: todo.title,
-    body: todo.body,
-  });
 
   function handleDone(id) {
     setTodos(
@@ -31,110 +20,8 @@ export default function Todo({ todo }) {
     );
   }
 
-  function handleOpenDelete() {
-    setOpenDelete(true);
-  }
-
-  function handleCloseDelete() {
-    setOpenDelete(false);
-  }
-
-  function handleDelete(id) {
-    setTodos(todos.filter((todo) => id !== todo.id));
-    setOpenDelete(false);
-  }
-
-  function handleOpenEdit() {
-    setUpdateTodo({ title: todo.title, body: todo.body });
-    setOpenEdit(true);
-  }
-
-  function handleCloseEdit() {
-    setOpenEdit(false);
-  }
-
-  function handleEdit() {
-    setTodos(
-      todos.map((t) =>
-        t.id === todo.id
-          ? { ...t, title: updateTodo.title, body: updateTodo.body }
-          : t
-      )
-    );
-    setOpenEdit(false);
-  }
-
   return (
     <>
-      {/* Delete */}
-      <Dialog
-        open={openDelete}
-        onClose={handleCloseDelete}
-        aria-labelledby="responsive-dialog-title"
-        disableRestoreFocus
-        disableEnforceFocus
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {`Do You sure You want to delete "${todo.title}"`}
-        </DialogTitle>
-
-        <DialogActions>
-          <Button onClick={handleCloseDelete}>Cancel</Button>
-          <Button
-            onClick={() => {
-              handleDelete(todo.id);
-            }}
-            color="error"
-            autoFocus
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* Delete */}
-
-      {/* Edit */}
-      <Dialog
-        disableEnforceFocus
-        disableRestoreFocus
-        fullWidth
-        open={openEdit}
-        onClose={handleCloseEdit}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Edit The Task</DialogTitle>
-        <DialogContent>
-          <TextField
-            value={updateTodo.title}
-            margin="dense"
-            label="Title"
-            fullWidth
-            variant="standard"
-            onChange={(e) => {
-              setUpdateTodo({ ...updateTodo, title: e.target.value });
-            }}
-          />
-          <TextField
-            value={updateTodo.body}
-            margin="dense"
-            label="Details"
-            fullWidth
-            variant="standard"
-            onChange={(e) => {
-              setUpdateTodo({ ...updateTodo, body: e.target.value });
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEdit}>Cancel</Button>
-          <Button onClick={handleEdit} autoFocus>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Edit */}
       <Card
         sx={{
           bgcolor: "#f8f9fa",
@@ -202,7 +89,9 @@ export default function Todo({ todo }) {
                 <CheckCircleOutlineIcon fontSize="medium" />
               </IconButton>
               <IconButton
-                onClick={handleOpenEdit}
+                onClick={() => {
+                  handleOpenEdit(todo);
+                }}
                 size="medium"
                 sx={{
                   color: "#667eea",
@@ -215,7 +104,7 @@ export default function Todo({ todo }) {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  handleOpenDelete();
+                  handleOpenDelete(todo);
                 }}
                 size="medium"
                 sx={{

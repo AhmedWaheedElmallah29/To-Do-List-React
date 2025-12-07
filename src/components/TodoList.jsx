@@ -16,11 +16,63 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { TodosContext } from "../context/todosContext";
 import { v4 as uuidv4 } from "uuid";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { DialogContent } from "@mui/material";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
   const [inp, setInp] = useState("");
   const [value, setValue] = useState(0);
+
+  //////////////// for handleDelete////////////////////
+  const [openDelete, setOpenDelete] = useState(false);
+  const [dialogTodo, setDialogTodo] = useState(null);
+
+  function handleOpenDelete(todo) {
+    setDialogTodo(todo);
+    setOpenDelete(true);
+  }
+
+  function handleCloseDelete() {
+    setOpenDelete(false);
+  }
+
+  function handleDelete() {
+    setTodos(todos.filter((todo) => dialogTodo.id !== todo.id));
+    setOpenDelete(false);
+  }
+  //////////////// for handleDelete////////////////////
+
+  ////////////////// for handleEdit/////////////////////
+  const [openEdit, setOpenEdit] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState({
+    title: todos.title,
+    body: todos.body,
+  });
+
+  function handleOpenEdit(todo) {
+    setDialogTodo(todo);
+    setUpdateTodo({ title: todo.title, body: todo.body });
+    setOpenEdit(true);
+  }
+
+  function handleCloseEdit() {
+    setOpenEdit(false);
+  }
+
+  function handleEdit() {
+    setTodos(
+      todos.map((t) =>
+        t.id === dialogTodo.id
+          ? { ...t, title: updateTodo.title, body: updateTodo.body }
+          : t
+      )
+    );
+    setOpenEdit(false);
+  }
+  ////////////////// for handleEdit/////////////////////
 
   function handleAdd() {
     inp &&
@@ -48,6 +100,67 @@ export default function TodoList() {
 
   return (
     <>
+      {/* Delete */}
+      <Dialog
+        open={openDelete}
+        onClose={handleCloseDelete}
+        aria-labelledby="responsive-dialog-title"
+        disableRestoreFocus
+        disableEnforceFocus
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {`Do You sure You want to delete This Todo`}
+        </DialogTitle>
+
+        <DialogActions>
+          <Button onClick={handleCloseDelete}>Cancel</Button>
+          <Button onClick={handleDelete} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Delete */}
+      {/* Edit */}
+      <Dialog
+        disableEnforceFocus
+        disableRestoreFocus
+        fullWidth
+        open={openEdit}
+        onClose={handleCloseEdit}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Edit The Task</DialogTitle>
+        <DialogContent>
+          <TextField
+            value={updateTodo.title}
+            margin="dense"
+            label="Title"
+            fullWidth
+            variant="standard"
+            onChange={(e) => {
+              setUpdateTodo({ ...updateTodo, title: e.target.value });
+            }}
+          />
+          <TextField
+            value={updateTodo.body}
+            margin="dense"
+            label="Details"
+            fullWidth
+            variant="standard"
+            onChange={(e) => {
+              setUpdateTodo({ ...updateTodo, body: e.target.value });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEdit}>Cancel</Button>
+          <Button onClick={handleEdit} autoFocus>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Edit */}
       <CssBaseline />
       <Container maxWidth="sm">
         <Box
@@ -125,7 +238,12 @@ export default function TodoList() {
               >
                 {todosToBeRendered.length > 0 ? (
                   todosToBeRendered.map((todo) => (
-                    <Todo key={todo.id} todo={todo} />
+                    <Todo
+                      key={todo.id}
+                      todo={todo}
+                      handleOpenEdit={handleOpenEdit}
+                      handleOpenDelete={handleOpenDelete}
+                    />
                   ))
                 ) : (
                   <Box

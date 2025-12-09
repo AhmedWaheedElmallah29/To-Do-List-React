@@ -1,9 +1,8 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import TodoList from "./components/TodoList";
-import { TodosContext } from "./context/todosContext";
 import MySnackbar from "./components/MySnackbar";
 import { ToastContext } from "./context/ToastContext";
-
+import { TodosContext } from "./context/TodosContext";
 function App() {
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem("todos");

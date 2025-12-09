@@ -5,7 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "./context/TodosContext";
+
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { ToastContext } from "../context/ToastContext";

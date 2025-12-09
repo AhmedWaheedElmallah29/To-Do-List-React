@@ -21,11 +21,12 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContent } from "@mui/material";
-import { ToastContext } from "../context/ToastContext";
+import { useToast } from "../context/ToastContext";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
+
   const [inp, setInp] = useState("");
   const [value, setValue] = useState(0);
 

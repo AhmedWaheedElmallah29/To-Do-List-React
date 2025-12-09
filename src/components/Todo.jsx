@@ -9,11 +9,11 @@ import { TodosContext } from "../context/TodosContext";
 
 import Box from "@mui/material/Box";
 import { useContext } from "react";
-import { ToastContext } from "../context/ToastContext";
+import { useToast } from "../context/ToastContext";
 
 export default function Todo({ todo, handleOpenDelete, handleOpenEdit }) {
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
   function handleDone(id) {
     const currentTodo = todos.find((t) => t.id === id);
     if (currentTodo.isDone) {

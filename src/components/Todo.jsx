@@ -8,15 +8,26 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { TodosContext } from "../context/todosContext";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
+import { ToastContext } from "../context/ToastContext";
 
 export default function Todo({ todo, handleOpenDelete, handleOpenEdit }) {
   const { todos, setTodos } = useContext(TodosContext);
-
+  const { showHideToast } = useContext(ToastContext);
   function handleDone(id) {
+    const currentTodo = todos.find((t) => t.id === id);
+    if (currentTodo.isDone) {
+      showHideToast("Task is Pending again");
+    } else {
+      showHideToast("Task is Done Successfully");
+    }
+
     setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      )
+      todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, isDone: !todo.isDone };
+        }
+        return todo;
+      })
     );
   }
 

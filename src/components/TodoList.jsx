@@ -20,9 +20,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContent } from "@mui/material";
+import { ToastContext } from "../context/ToastContext";
 
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(ToastContext);
   const [inp, setInp] = useState("");
   const [value, setValue] = useState(0);
 
@@ -42,6 +44,7 @@ export default function TodoList() {
   function handleDelete() {
     setTodos(todos.filter((todo) => dialogTodo.id !== todo.id));
     setOpenDelete(false);
+    showHideToast("Deleted Successfully");
   }
   //////////////// for handleDelete////////////////////
 
@@ -71,6 +74,7 @@ export default function TodoList() {
       )
     );
     setOpenEdit(false);
+    showHideToast("Edited Successfully");
   }
   ////////////////// for handleEdit/////////////////////
 
@@ -81,6 +85,7 @@ export default function TodoList() {
         { id: uuidv4(), title: inp, body: "", isDone: false },
       ]);
     setInp("");
+    showHideToast("Added Successfully");
   }
 
   const todosToBeRendered = useMemo(() => {

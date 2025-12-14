@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useReducer, useState } from "react";
 import Todo from "./Todo";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -22,13 +22,21 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContent } from "@mui/material";
 import { useToast } from "../context/ToastContext";
+import reducer from "../reducers/TodosReducer";
 
 export default function TodoList() {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos2, setTodos } = useContext(TodosContext);
+  const [todos, dispatch] = useReducer(reducer, []);
   const { showHideToast } = useToast();
 
   const [inp, setInp] = useState("");
   const [value, setValue] = useState(0);
+
+  function handleAdd() {
+    inp && dispatch({ type: "added", payload: { title: inp } });
+    setInp("");
+    showHideToast("Added Successfully");
+  }
 
   //////////////// for handleDelete////////////////////
   const [openDelete, setOpenDelete] = useState(false);
@@ -79,16 +87,6 @@ export default function TodoList() {
     showHideToast("Edited Successfully");
   }
   ////////////////// for handleEdit/////////////////////
-
-  function handleAdd() {
-    inp &&
-      setTodos([
-        ...todos,
-        { id: uuidv4(), title: inp, body: "", isDone: false },
-      ]);
-    setInp("");
-    showHideToast("Added Successfully");
-  }
 
   const todosToBeRendered = useMemo(() => {
     return todos.filter((todo) => {

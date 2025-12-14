@@ -7,6 +7,8 @@ export default function reducer(state, action) {
         ...state,
         { id: uuidv4(), title: action.payload.title, body: "", isDone: false },
       ];
+    case "delete":
+      return state.filter((todo) => action.payload.id !== todo.id);
 
     default:
       throw new Error("Unknown Action" + action.type);

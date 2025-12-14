@@ -52,7 +52,8 @@ export default function TodoList() {
   }
 
   function handleDelete() {
-    setTodos(todos.filter((todo) => dialogTodo.id !== todo.id));
+    dispatch({ type: "delete", payload: { id: dialogTodo.id } });
+    // setTodos(todos.filter((todo) => dialogTodo.id !== todo.id));
     setOpenDelete(false);
     showHideToast("Deleted Successfully");
   }

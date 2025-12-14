@@ -9,7 +9,12 @@ export default function reducer(state, action) {
       ];
     case "delete":
       return state.filter((todo) => action.payload.id !== todo.id);
-
+    case "update":
+      return state.map((t) =>
+        t.id === action.payload.id
+          ? { ...t, title: action.payload.title, body: action.payload.body }
+          : t
+      );
     default:
       throw new Error("Unknown Action" + action.type);
   }

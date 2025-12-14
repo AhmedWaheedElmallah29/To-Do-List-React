@@ -53,7 +53,6 @@ export default function TodoList() {
 
   function handleDelete() {
     dispatch({ type: "delete", payload: { id: dialogTodo.id } });
-    // setTodos(todos.filter((todo) => dialogTodo.id !== todo.id));
     setOpenDelete(false);
     showHideToast("Deleted Successfully");
   }
@@ -77,13 +76,21 @@ export default function TodoList() {
   }
 
   function handleEdit() {
-    setTodos(
-      todos.map((t) =>
-        t.id === dialogTodo.id
-          ? { ...t, title: updateTodo.title, body: updateTodo.body }
-          : t
-      )
-    );
+    dispatch({
+      type: "update",
+      payload: {
+        id: dialogTodo.id,
+        title: updateTodo.title,
+        body: updateTodo.body,
+      },
+    });
+    // setTodos(
+    //   todos.map((t) =>
+    //     t.id === dialogTodo.id
+    //       ? { ...t, title: updateTodo.title, body: updateTodo.body }
+    //       : t
+    //   )
+    // );
     setOpenEdit(false);
     showHideToast("Edited Successfully");
   }

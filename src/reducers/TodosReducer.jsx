@@ -15,6 +15,13 @@ export default function reducer(state, action) {
           ? { ...t, title: action.payload.title, body: action.payload.body }
           : t
       );
+    case "done":
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return { ...todo, isDone: !todo.isDone };
+        }
+        return todo;
+      });
     default:
       throw new Error("Unknown Action" + action.type);
   }

@@ -9,24 +9,21 @@ import Box from "@mui/material/Box";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import { useContext, useMemo, useReducer, useState } from "react";
+import { useMemo, useState } from "react";
 import Todo from "./Todo";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { TodosContext } from "../context/TodosContext";
+import { useTodos } from "../context/TodosContext";
 
-import { v4 as uuidv4 } from "uuid";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContent } from "@mui/material";
 import { useToast } from "../context/ToastContext";
-import reducer from "../reducers/TodosReducer";
 
 export default function TodoList() {
-  const { todos2, setTodos } = useContext(TodosContext);
-  const [todos, dispatch] = useReducer(reducer, []);
+  const { todos, dispatch } = useTodos();
   const { showHideToast } = useToast();
 
   const [inp, setInp] = useState("");
@@ -84,13 +81,6 @@ export default function TodoList() {
         body: updateTodo.body,
       },
     });
-    // setTodos(
-    //   todos.map((t) =>
-    //     t.id === dialogTodo.id
-    //       ? { ...t, title: updateTodo.title, body: updateTodo.body }
-    //       : t
-    //   )
-    // );
     setOpenEdit(false);
     showHideToast("Edited Successfully");
   }

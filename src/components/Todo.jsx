@@ -5,31 +5,24 @@ import IconButton from "@mui/material/IconButton";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { TodosContext } from "../context/TodosContext";
+import { TodosContext, useTodos } from "../context/TodosContext";
 
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { useToast } from "../context/ToastContext";
 
 export default function Todo({ todo, handleOpenDelete, handleOpenEdit }) {
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos, dispatch } = useTodos();
+
   const { showHideToast } = useToast();
   function handleDone(id) {
+    dispatch({ type: "done", payload: todo });
     const currentTodo = todos.find((t) => t.id === id);
     if (currentTodo.isDone) {
       showHideToast("Task is Pending again");
     } else {
       showHideToast("Task is Done Successfully");
     }
-
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, isDone: !todo.isDone };
-        }
-        return todo;
-      })
-    );
   }
 
   return (

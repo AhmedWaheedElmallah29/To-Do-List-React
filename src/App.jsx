@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TodoList from "./components/TodoList";
 import MySnackbar from "./components/MySnackbar";
-import { TodosContext } from "./context/TodosContext";
+import { TodosContext, TodosProvider } from "./context/TodosContext";
 import { ToastProvider } from "./context/ToastContext";
 function App() {
   const [todos, setTodos] = useState(() => {
@@ -14,20 +14,20 @@ function App() {
   }, [todos]);
 
   return (
-    <ToastProvider>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "centers",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <TodosContext.Provider value={{ todos, setTodos }}>
+    <TodosProvider>
+      <ToastProvider>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "centers",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
           <TodoList />
-        </TodosContext.Provider>
-      </div>
-    </ToastProvider>
+        </div>
+      </ToastProvider>
+    </TodosProvider>
   );
 }
 
